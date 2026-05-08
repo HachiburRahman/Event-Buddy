@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .form-input {
+    @apply mt-1 block w-full px-4 py-3 bg-gray-50 border border-light-gray rounded-md shadow-sm focus:outline-none focus:ring-primary-blue focus:border-primary-blue;
+  }
+  .form-error {
+    @apply mt-1 text-sm text-red-600;
+  }
+  .form-btn-primary {
+    @apply px-6 py-2.5 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300 disabled:bg-indigo-400;
+  }
+  .form-btn-secondary {
+    @apply px-6 py-2.5 text-base font-semibold text-dark-gray bg-light-gray rounded-lg hover:bg-gray-300 transition-colors duration-300;
+  }
+  .form-label {
+    @apply block text-sm font-semibold text-dark-gray mb-2;
+  }
+}
