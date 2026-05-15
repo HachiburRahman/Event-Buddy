@@ -1,4 +1,4 @@
-// src/components/shared/Hero.tsx
+
 import { Search } from 'lucide-react';
 
 const Hero = () => {

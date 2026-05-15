@@ -1,4 +1,4 @@
-// frontend/src/app/(auth)/reset-password/page.tsx
+
 
 'use client';
 
@@ -62,7 +62,7 @@ function ResetPasswordForm() {
       return;
     }
 
-    // Check if password contains at least one letter and one number
+
     const hasLetter = /[a-zA-Z]/.test(newPassword);
     const hasNumber = /\d/.test(newPassword);
     if (!hasLetter || !hasNumber) {
@@ -80,7 +80,7 @@ function ResetPasswordForm() {
         newPassword,
       });
 
-      // Show success message
+
       alert('Password has been reset successfully! Please log in with your new password.');
       router.push('/login');
 
@@ -104,14 +104,14 @@ function ResetPasswordForm() {
 
       <form onSubmit={handleSubmit} noValidate>
         <div className="space-y-6">
-          {/* Error Message */}
+
           {error && (
             <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
               {error}
             </p>
           )}
 
-          {/* Verification Code Input */}
+
           <div>
             <label htmlFor="resetCode" className="form-label">Verification Code</label>
             <input
@@ -141,7 +141,7 @@ function ResetPasswordForm() {
             )}
           </div>
 
-          {/* New Password Input */}
+
           <div>
             <label htmlFor="newPassword" className="form-label">New Password</label>
             <input
@@ -158,7 +158,7 @@ function ResetPasswordForm() {
             />
           </div>
 
-          {/* Confirm Password Input */}
+
           <div>
             <label htmlFor="confirmPassword" className="form-label">Confirm New Password</label>
             <input
@@ -175,7 +175,7 @@ function ResetPasswordForm() {
             />
           </div>
 
-          {/* Submit Button */}
+
           <div>
             <button
               type="submit"
@@ -186,7 +186,7 @@ function ResetPasswordForm() {
             </button>
           </div>
 
-          {/* Resend Code Link */}
+
           <div className="text-center">
             <p className="text-sm text-medium-gray">
               Didn't receive the code?{' '}
@@ -199,7 +199,7 @@ function ResetPasswordForm() {
             </p>
           </div>
 
-          {/* Back to Login Link */}
+
           <div className="text-center">
             <Link href="/login" className="text-sm text-primary-blue hover:underline">
               ← Back to Sign in

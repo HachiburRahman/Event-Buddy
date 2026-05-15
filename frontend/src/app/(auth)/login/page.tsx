@@ -1,4 +1,4 @@
-// frontend/src/app/(auth)/login/page.tsx
+
 
 'use client'; 
 
@@ -47,7 +47,7 @@ export default function LoginPage() {
       
       <form onSubmit={handleSubmit} noValidate>
         <div className="space-y-6">
-          {/* Email Input */}
+
           <div>
             <label htmlFor="email" className="form-label">Email</label>
             <input 
@@ -64,7 +64,7 @@ export default function LoginPage() {
             />
           </div>
           
-          {/* Password Input */}
+
           <div>
             <label htmlFor="password" className="form-label">Password</label>
             <input
@@ -86,14 +86,14 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Error Message Display */}
+
           {error && (
             <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
               {error}
             </p>
           )}
           
-          {/* Submit Button */}
+
           <div>
             <button
               type="submit"

@@ -1,4 +1,4 @@
-// /Users/jalalsmac/event-buddy/frontend/src/components/shared/EventForm.tsx
+
 'use client';
 
 import React, { useState, FormEvent, useEffect } from 'react';
@@ -30,7 +30,7 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
     useEffect(() => {
         if (mode === 'edit' && initialData) {
             const eventDate = new Date(initialData.date);
-            const dateStr = eventDate.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+            const dateStr = eventDate.toISOString().split('T')[0];
             const timeStr = eventDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
             setFormData({
@@ -40,7 +40,7 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
                 time: timeStr,
                 location: initialData.location,
                 capacity: initialData.capacity,
-                tags: initialData.tags.join(', '), // Convert string[] to string
+                tags: initialData.tags.join(', '),
                 imageUrl: initialData.imageUrl,
                 image: null,
             });

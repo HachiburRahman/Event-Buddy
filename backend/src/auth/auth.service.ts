@@ -25,7 +25,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
-  ) {}
+  ) { }
 
 
   async register(createUserDto: CreateUserDto) {
@@ -46,7 +46,7 @@ export class AuthService {
 
     try {
       const savedUser = await this.userRepository.save(newUser);
-      delete (savedUser as any).password; 
+      delete (savedUser as any).password;
       return savedUser;
     } catch (error) {
       throw new InternalServerErrorException(
@@ -155,10 +155,9 @@ export class AuthService {
       throw new BadRequestException('Reset code has expired. Please request a new one.');
     }
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update the password and clear the reset code
+
     await this.userRepository.update(user.id, {
       password: hashedPassword,
       resetCode: null,

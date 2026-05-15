@@ -1,6 +1,6 @@
-// frontend/src/context/AuthContext.tsx
 
-'use client'; 
+
+'use client';
 
 import React, { createContext, useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const { data } = await api.get('/auth/profile');
           setUser(data);
         } catch (error) {
-          console.warn('Session expired or invalid token.');
           localStorage.removeItem('token');
         }
       }
@@ -57,10 +56,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         router.push('/user/dashboard');
       }
     } catch (error) {
-
-      if (error instanceof AxiosError && error.response?.status !== 401) {
-        console.error('Unexpected login error:', error);
-      }
       throw error;
     }
   };
@@ -71,7 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       await login({ email: data.email, password: data.password });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status !== 409) {
-          console.error('Unexpected registration error:', error);
+        console.error('Unexpected registration error:', error);
       }
       throw error;
     }
@@ -80,8 +75,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     router.push('/');
     setTimeout(() => {
-        setUser(null);
-        localStorage.removeItem('token');
+      setUser(null);
+      localStorage.removeItem('token');
     }, 100);
   };
 

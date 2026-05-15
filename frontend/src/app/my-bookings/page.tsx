@@ -1,4 +1,4 @@
-// frontend/src/app/my-bookings/page.tsx
+
 
 'use client';
 
@@ -12,13 +12,11 @@ export default function MyBookingsPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      // Redirect to login if not authenticated
       router.push('/login');
       return;
     }
 
     if (user) {
-      // Redirect to appropriate dashboard based on role
       if (user.role === 'ADMIN') {
         router.push('/admin/dashboard');
       } else {

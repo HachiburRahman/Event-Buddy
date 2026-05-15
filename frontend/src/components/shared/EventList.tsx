@@ -1,4 +1,4 @@
-// frontend/src/components/shared/EventList.tsx
+
 
 'use client'; 
 

@@ -1,4 +1,4 @@
-// /Users/jalalsmac/event-buddy/frontend/src/app/(dashboard)/admin/dashboard/page.tsx
+
 'use client';
 
 import { useState, useEffect } from 'react';

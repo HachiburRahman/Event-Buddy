@@ -1,24 +1,24 @@
-// frontend/src/app/(auth)/register/page.tsx
 
-'use client'; 
+
+'use client';
 
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function RegisterPage() {
-  const { register } = useAuth(); 
-  
+  const { register } = useAuth();
+
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault(); 
-    
+    event.preventDefault();
+
     if (!fullName || !email || !password) {
       setError("All fields are required.");
       return;
@@ -26,20 +26,20 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     setError(null);
-    
+
     try {
-      
-      await register({ fullName, email, password });      
+
+      await register({ fullName, email, password });
     } catch (err: any) {
-      
+
       const errorMessage = err.response?.data?.message || 'Registration failed. This email may already be in use.';
       setError(errorMessage);
     } finally {
-      
+
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
       <div className="text-left mb-6">
@@ -51,19 +51,19 @@ export default function RegisterPage() {
           </Link>
         </p>
       </div>
-      
+
       <form onSubmit={handleSubmit} noValidate>
         <div className="space-y-6">
-          {/* Full Name Input */}
+
           <div>
             <label htmlFor="fullName" className="form-label">Full Name</label>
-            <input 
-              id="fullName" 
-              name="fullName" 
-              type="text" 
-              autoComplete="name" 
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              autoComplete="name"
               required
-              placeholder="Jalal Uddin"
+              placeholder="Hachibur Rahman"
               className="form-input"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -71,14 +71,14 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Email Input */}
+
           <div>
             <label htmlFor="email" className="form-label">Email</label>
-            <input 
-              id="email" 
-              name="email" 
-              type="email" 
-              autoComplete="email" 
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
               required
               placeholder="enter your email"
               className="form-input"
@@ -87,14 +87,14 @@ export default function RegisterPage() {
               disabled={isLoading}
             />
           </div>
-          
-          {/* Password Input */}
+
+
           <div>
             <label htmlFor="password" className="form-label">Password</label>
-            <input 
-              id="password" 
-              name="password" 
-              type="password" 
+            <input
+              id="password"
+              name="password"
+              type="password"
               autoComplete="new-password"
               required
               placeholder="enter your password"
@@ -105,14 +105,14 @@ export default function RegisterPage() {
             />
           </div>
 
-          {/* Error Message Display */}
+
           {error && (
             <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
               {error}
             </p>
           )}
-          
-          {/* Submit Button */}
+
+
           <div>
             <button
               type="submit"

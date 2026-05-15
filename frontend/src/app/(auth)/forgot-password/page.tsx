@@ -1,4 +1,4 @@
-// frontend/src/app/(auth)/forgot-password/page.tsx
+
 
 'use client';
 
@@ -26,12 +26,12 @@ export default function ForgotPasswordPage() {
     setError(null);
 
     try {
-      // Call backend API to send reset code
+
       await api.post('/auth/forgot-password', { email });
 
       setSuccess(true);
 
-      // Redirect to reset-password page after 2 seconds
+
       setTimeout(() => {
         router.push(`/reset-password?email=${encodeURIComponent(email)}`);
       }, 2000);
@@ -67,14 +67,14 @@ export default function ForgotPasswordPage() {
       ) : (
         <form onSubmit={handleSubmit} noValidate>
           <div className="space-y-6">
-            {/* Error Message */}
+
             {error && (
               <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
                 {error}
               </p>
             )}
 
-            {/* Email Input */}
+
             <div>
               <label htmlFor="email" className="form-label">Email Address</label>
               <input
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
               />
             </div>
 
-            {/* Submit Button */}
+
             <div>
               <button
                 type="submit"
@@ -102,7 +102,7 @@ export default function ForgotPasswordPage() {
               </button>
             </div>
 
-            {/* Back to Login Link */}
+
             <p className="text-center mt-4 text-sm text-medium-gray">
               Remember your password?{' '}
               <Link href="/login" className="font-semibold text-primary-blue hover:underline">
