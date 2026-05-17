@@ -6,15 +6,20 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        'primary-blue': '#4F46E5',   // Main button and link color
-        'light-violet': '#F5F3FF', // Page background color
-        'dark-gray': '#374151',      // For main headings
-        'medium-gray': '#6B7280',   // For subheadings and body text
-        'light-gray': '#E5E7EB',     // For borders and dividers
-        'danger-red': '#EF4444',       // For delete/cancel buttons
+        'primary-blue': 'rgb(var(--primary-blue) / <alpha-value>)',
+        'light-violet': 'rgb(var(--light-violet) / <alpha-value>)',
+        'dark-gray': 'rgb(var(--dark-gray) / <alpha-value>)',
+        'medium-gray': 'rgb(var(--medium-gray) / <alpha-value>)',
+        'light-gray': 'rgb(var(--light-gray) / <alpha-value>)',
+        'danger-red': 'rgb(var(--danger-red) / <alpha-value>)',
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
+        card: 'rgb(var(--card) / <alpha-value>)',
+        'card-foreground': 'rgb(var(--card-foreground) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'], 

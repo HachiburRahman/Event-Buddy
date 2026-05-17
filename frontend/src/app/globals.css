@@ -2,20 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --primary-blue: 79 70 229; /* #4F46E5 */
+    --light-violet: 245 243 255; /* #F5F3FF */
+    --dark-gray: 55 65 81; /* #374151 */
+    --medium-gray: 107 114 128; /* #6B7280 */
+    --light-gray: 229 231 235; /* #E5E7EB */
+    --danger-red: 239 68 68; /* #EF4444 */
+    
+    --background: 245 243 255;
+    --foreground: 55 65 81;
+    --card: 255 255 255;
+    --card-foreground: 55 65 81;
+  }
+
+  .dark {
+    --primary-blue: 99 102 241; /* #6366F1, slightly lighter blue for dark mode */
+    --light-violet: 15 23 42; /* #0F172A, slate-900 for dark mode background */
+    --dark-gray: 248 250 252; /* #F8FAFC, slate-50 for dark mode headings/dark text */
+    --medium-gray: 148 163 184; /* #94A3B8, slate-400 for dark mode body text */
+    --light-gray: 51 65 85; /* #334155, slate-700 for dark mode borders */
+    --danger-red: 239 68 68;
+    
+    --background: 15 23 42;
+    --foreground: 248 250 252;
+    --card: 30 41 59; /* slate-800 */
+    --card-foreground: 248 250 252;
+  }
+}
+
 @layer components {
   .form-input {
-    @apply mt-1 block w-full px-4 py-3 bg-gray-50 border border-light-gray rounded-md shadow-sm focus:outline-none focus:ring-primary-blue focus:border-primary-blue;
+    @apply mt-1 block w-full px-4 py-3 bg-white dark:bg-card border border-light-gray rounded-md shadow-sm focus:outline-none focus:ring-primary-blue focus:border-primary-blue text-dark-gray transition-colors;
   }
   .form-error {
-    @apply mt-1 text-sm text-red-600;
+    @apply mt-1 text-sm text-danger-red;
   }
   .form-btn-primary {
-    @apply px-6 py-2.5 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-300 disabled:bg-indigo-400;
+    @apply px-6 py-2.5 text-base font-semibold text-white bg-primary-blue rounded-lg shadow-md hover:opacity-90 transition-all duration-300 disabled:opacity-50;
   }
   .form-btn-secondary {
-    @apply px-6 py-2.5 text-base font-semibold text-dark-gray bg-light-gray rounded-lg hover:bg-gray-300 transition-colors duration-300;
+    @apply px-6 py-2.5 text-base font-semibold text-dark-gray bg-light-gray rounded-lg hover:brightness-95 transition-all duration-300;
   }
   .form-label {
-    @apply block text-sm font-semibold text-dark-gray mb-2;
+    @apply block text-sm font-semibold text-dark-gray mb-2 transition-colors;
   }
 }

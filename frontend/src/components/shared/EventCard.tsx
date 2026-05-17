@@ -25,7 +25,7 @@ const EventCard = ({ event }: EventCardProps) => {
 
   return (
     <Link href={`/events/${event.id}`} className="block group">
-      <article className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col transition-transform transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+      <article className="bg-card rounded-2xl shadow-md dark:shadow-none border border-transparent dark:border-gray-800/60 overflow-hidden h-full flex flex-col transition-all transform duration-300 group-hover:-translate-y-1 group-hover:shadow-xl dark:group-hover:border-primary-blue/50">
 
         <div className="relative h-48 w-full">
           <Image
@@ -74,7 +74,7 @@ const EventCard = ({ event }: EventCardProps) => {
 
           <div className="mt-4 flex flex-wrap gap-2">
             {event.tags.map((tag) => (
-              <span key={tag} className="px-2.5 py-1 text-xs font-semibold text-primary-blue bg-indigo-100 rounded-full">
+              <span key={tag} className="px-2.5 py-1 text-xs font-semibold text-primary-blue bg-indigo-100 dark:bg-primary-blue/20 rounded-full transition-colors">
                 {tag}
               </span>
             ))}
@@ -83,7 +83,7 @@ const EventCard = ({ event }: EventCardProps) => {
           <div className="flex-grow"></div>
 
 
-          <div className="mt-5 pt-4 border-t border-light-gray flex justify-between items-center text-sm text-medium-gray">
+          <div className="mt-5 pt-4 border-t border-light-gray dark:border-gray-800/60 flex justify-between items-center text-sm text-medium-gray">
              <div className="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 <span>{event.spotsLeft} Spots Left</span>
