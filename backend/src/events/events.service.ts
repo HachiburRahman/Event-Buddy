@@ -2,7 +2,7 @@
 
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, MoreThan, LessThan, In } from 'typeorm';
+import { Repository, MoreThan, LessThan, In, ILike } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
@@ -93,9 +93,17 @@ export class EventsService {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 6;
     const skip = (page - 1) * limit;
+    const search = paginationDto.search;
+
+    const whereCondition = search 
+      ? [
+          { date: MoreThan(new Date()), title: ILike(`%${search}%`) },
+          { date: MoreThan(new Date()), description: ILike(`%${search}%`) }
+        ]
+      : { date: MoreThan(new Date()) };
 
     const [events, total] = await this.eventRepository.findAndCount({
-      where: { date: MoreThan(new Date()) },
+      where: whereCondition,
       order: { date: 'ASC' },
       skip, take: limit,
     });
@@ -108,9 +116,17 @@ export class EventsService {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 6;
     const skip = (page - 1) * limit;
+    const search = paginationDto.search;
+
+    const whereCondition = search 
+      ? [
+          { date: LessThan(new Date()), title: ILike(`%${search}%`) },
+          { date: LessThan(new Date()), description: ILike(`%${search}%`) }
+        ]
+      : { date: LessThan(new Date()) };
 
     const [events, total] = await this.eventRepository.findAndCount({
-        where: { date: LessThan(new Date()) },
+        where: whereCondition,
         order: { date: 'DESC' },
         skip, take: limit,
     });

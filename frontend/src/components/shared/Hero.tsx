@@ -1,7 +1,22 @@
+'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search } from 'lucide-react';
 
-const Hero = () => {
+const Hero = ({ initialSearch = '' }: { initialSearch?: string }) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/?search=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      router.push('/');
+    }
+  };
+
   return (
     <section 
       className="relative bg-cover bg-center bg-no-repeat pt-40 pb-20 text-center"
@@ -19,12 +34,14 @@ const Hero = () => {
 
         <div className="mt-10">
           <p className="font-semibold text-dark-gray mb-4">Find Your Next Event</p>
-          <form className="max-w-xl mx-auto flex flex-col sm:flex-row items-center gap-4">
+          <form onSubmit={handleSearch} className="max-w-xl mx-auto flex flex-col sm:flex-row items-center gap-4">
             <div className="relative w-full">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input 
                 type="text" 
                 placeholder="Search events" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 bg-white border border-light-gray rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-blue"
               />
             </div>

@@ -12,9 +12,10 @@ import Pagination from '../ui/Pagination';
 type EventListProps = {
   title: string;
   type: 'upcoming' | 'past';
+  search?: string;
 };
 
-const EventList = ({ title, type }: EventListProps) => {
+const EventList = ({ title, type, search }: EventListProps) => {
   const [events, setEvents] = useState<IEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +35,7 @@ const EventList = ({ title, type }: EventListProps) => {
         params: {
           page,
           limit,
+          ...(search ? { search } : {}),
         },
       });
 
@@ -46,7 +48,7 @@ const EventList = ({ title, type }: EventListProps) => {
     } finally {
       setIsLoading(false);
     }
-  }, [type]); 
+  }, [type, search]); 
 
   useEffect(() => {
     fetchEvents(currentPage);
