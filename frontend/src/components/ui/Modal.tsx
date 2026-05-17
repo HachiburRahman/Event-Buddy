@@ -1,4 +1,4 @@
-// frontend/src/components/ui/Modal.tsx
+
 'use client';
 
 import React, { useEffect, useRef } from 'react';
@@ -8,7 +8,7 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  title: string; // Title is now mandatory for better structure
+  title: string;
 };
 
 const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
@@ -44,7 +44,7 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
         ref={modalRef}
         className="bg-white rounded-lg shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] transform transition-all"
       >
-        {/* Modal Header */}
+
         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
           <h3 id="modal-title" className="text-xl font-semibold text-dark-gray">
             {title}
@@ -56,7 +56,7 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
             aria-label="Close modal"
           >
             <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
             </svg>
           </button>
         </div>

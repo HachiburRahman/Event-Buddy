@@ -48,7 +48,7 @@ async function bootstrap() {
         description: 'Enter JWT token',
         in: 'header',
       },
-      'JWT-auth', // This name will be used in @ApiBearerAuth()
+      'JWT-auth',
     )
     .build();
 

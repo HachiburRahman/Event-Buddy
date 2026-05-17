@@ -19,7 +19,7 @@ export class ResetPasswordDto {
   resetCode: string;
 
   @ApiProperty({
-    example: 'NewPassword123',
+    example: 'NewPassword123@',
     description: 'New password (min 8 chars, must contain letter and number)',
   })
   @IsString()
