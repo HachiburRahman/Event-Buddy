@@ -3,8 +3,9 @@ import Hero from "@/components/shared/Hero";
 import EventList from "@/components/shared/EventList";
 import Footer from "@/components/shared/Footer";
 
-export default function HomePage({ searchParams }: { searchParams: { search?: string } }) {
-  const search = searchParams?.search || '';
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ search?: string }> }) {
+  const resolvedSearchParams = await searchParams;
+  const search = resolvedSearchParams?.search || '';
 
   return (
     <>
