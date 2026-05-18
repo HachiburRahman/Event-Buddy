@@ -60,7 +60,42 @@ export default function AdminDashboardPage() {
         if (error) return <p className="text-center text-danger-red">{error}</p>;
         if (events.length === 0) return <p className="text-center text-medium-gray py-8">No events created yet.</p>;
         return (
-            <div className="overflow-x-auto"><table className="min-w-full bg-white rounded-lg shadow"><thead className="bg-gray-50"><tr><th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Title</th><th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Date</th><th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Location</th><th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Registrations</th><th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Actions</th></tr></thead><tbody className="divide-y divide-gray-200">{events.map((event) => (<tr key={event.id}><td className="p-4 whitespace-nowrap text-sm font-medium text-dark-gray">{event.title}</td><td className="p-4 whitespace-nowrap text-sm text-medium-gray">{formatDate(event.date)}</td><td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.location}</td><td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.bookedSeats} / {event.capacity}</td><td className="p-4 whitespace-nowrap text-sm font-medium"><div className="flex items-center space-x-4"><button onClick={() => router.push(`/events/${event.id}`)} className="text-medium-gray hover:text-primary-blue" title="View Event"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button><button onClick={() => handleOpenEditModal(event)} className="text-medium-gray hover:text-primary-blue" title="Edit Event"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button onClick={() => handleDelete(event.id)} className="text-danger-red hover:text-red-700" title="Delete Event"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></button></div></td></tr>))}</tbody></table></div>
+            <div className="overflow-x-auto">
+                <table className="min-w-full bg-card rounded-lg overflow-hidden">
+                    <thead className="bg-light-violet/50 dark:bg-slate-800 border-b border-light-gray">
+                        <tr>
+                            <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Title</th>
+                            <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Date</th>
+                            <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Location</th>
+                            <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Registrations</th>
+                            <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-light-gray">
+                        {events.map((event) => (
+                            <tr key={event.id} className="hover:bg-light-violet/20 dark:hover:bg-slate-800/20 transition-colors">
+                                <td className="p-4 whitespace-nowrap text-sm font-medium text-dark-gray">{event.title}</td>
+                                <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{formatDate(event.date)}</td>
+                                <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.location}</td>
+                                <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.bookedSeats} / {event.capacity}</td>
+                                <td className="p-4 whitespace-nowrap text-sm font-medium">
+                                    <div className="flex items-center space-x-4">
+                                        <button onClick={() => router.push(`/events/${event.id}`)} className="text-medium-gray hover:text-primary-blue transition-colors" title="View Event">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        </button>
+                                        <button onClick={() => handleOpenEditModal(event)} className="text-medium-gray hover:text-primary-blue transition-colors" title="Edit Event">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                                        </button>
+                                        <button onClick={() => handleDelete(event.id)} className="text-danger-red hover:text-red-700 transition-colors" title="Delete Event">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         );
     }
     
@@ -74,7 +109,7 @@ export default function AdminDashboardPage() {
                         <h2 className="text-2xl font-bold text-dark-gray">Events Management</h2>
                         <button onClick={handleOpenCreateModal} className="form-btn-primary">Create Event</button>
                     </div>
-                    <div className="bg-white rounded-lg shadow-sm border border-light-gray">
+                    <div className="bg-card rounded-lg shadow-sm border border-light-gray overflow-hidden">
                         {renderEventTable()}
                     </div>
                 </section>

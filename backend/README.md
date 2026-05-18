@@ -1,123 +1,63 @@
-# Event Buddy - Backend API
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-This is the backend for the Event Buddy application, a full-stack event booking platform. It is built with **NestJS**, **TypeScript**, and **PostgreSQL**.
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=test_token
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## Features
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord" /></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://img.shields.io/opencollective/all/nest.svg?alt=back&active=false" alt="Backers on Open Collective" /></a>
+<a href="https://sponsor.nestjs.com/" target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us" /></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter" /></a>
+</p>
+  <!--  The body of the description is below -->
 
--   **JWT Authentication:** Secure endpoints with role-based access control (Admin vs. User).
--   **Strong Validation:** Enforces `@gmail.com` emails and strong passwords (uppercase, lowercase, number, special character, 8+ length).
--   **Admin Event Management:** Full CRUD (Create, Read, Update, Delete) functionality for events, including image uploads.
--   **Public Event Listings:** Publicly accessible endpoints for upcoming and past events with pagination.
--   **User Booking System:** Secure booking and cancellation system with robust validation (seat availability, event dates).
--   **Dynamic Seat Calculation:** All event endpoints provide real-time `bookedSeats` and `spotsLeft` data.
+## Description
 
----
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## 🚀 Getting Started
-
-### Prerequisites
-
--   [Node.js](https://nodejs.org/) (v18 or later recommended)
--   [npm](https://www.npmjs.com/)
--   [PostgreSQL](https://www.postgresql.org/download/) running locally
--   [pgAdmin 4](https://www.pgadmin.org/download/) (Recommended for database management)
-
-### 1. Setup
-
-**Clone the repository:**
-```bash
-git clone https://github.com/JALAL-00/Event-Buddy-Event-Management-System.git
-```
-
-**Navigate to the backend project folder:**
-```bash
-cd Event-Buddy-Event-Management-System/backend
-```
-
-**Install dependencies:**
-```bash
-npm install
-```
-
-### 2. Set Up Environment
-**Set Up Environment Variables:**
-    Create a `.env` file in the `/backend` directory with the following content. **Make sure to update these values to match your local PostgreSQL configuration.**
-    
-    # backend/.env
-
-    DATABASE_HOST=localhost
-    DATABASE_PORT=5432
-    DATABASE_USERNAME=postgres
-    DATABASE_PASSWORD=your_postgres_password_here
-    DATABASE_NAME=eventbuddy
-
-    JWT_SECRET=a8b3c1d9e7f5a2b8d4e6f3a1c9d8b7c6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0
-    JWT_EXPIRES_IN=1d
-
-
-### 3. Database Setup
-
-1.  Open **pgAdmin 4**.
-2.  Connect to your local PostgreSQL server.
-3.  **Drop** any existing `eventbuddy` database.
-4.  Right-click on `Databases` -> `Create` -> `Database...`.
-5.  Enter `eventbuddy` as the Database name and click Save.
-6.  The application will automatically create the necessary tables when it first starts (`synchronize: true` is enabled for development).
-
-### 4. Running the Application
+## Project setup
 
 ```bash
-npm run start:dev
+$ npm install
 ```
-The server will start on `http://localhost:3000`. The first time it runs, it will automatically seed the database with an Admin account.
 
-**Default Admin Credentials:**
--   **Email:** `admin.jalal@gmail.com`
--   **Password:** `AdminJalal123@`
+## Compile and run the project
 
-_Note: To change the default admin credentials, edit the variables in `backend/src/seed/seed.service.ts` and reset the database._
+```bash
+# development
+$ npm run start
 
----
+# watch mode
+$ npm run start:dev
 
-## 🧪 API Testing with Postman
+# production mode
+$ npm run start:prod
+```
 
-To facilitate easy testing of all API endpoints, a pre-configured Postman collection is provided. This collection includes requests for all major features.
+## Run tests
 
-1.  **Download the Collection:** Download the Postman collection JSON file from the following link:
-    [**Event Buddy Postman Collection**](https://drive.google.com/drive/folders/1_j6q3yYxdvPbcTDGrRC-8WVg3JHRu9qI?usp=sharing)
+```bash
+# unit tests
+$ npm run test
 
-2.  **Import:** Open Postman and click the **Import** button. Drag & Drop the file Don't need to change anything, everythig is managed propery(by folder) just open and Test Accordingly step-3 instructions.
+# e2e tests
+$ npm run test:e2e
 
-3.  **Workflow for Protected Routes:** Most routes require a JWT for    authorization. Here is the manual workflow:
-    a. First Run User registration Then Run the **Login User** or **Login Admin** request first (found in the `Auth` folder).
-    b. Copy the `access_token` from the JSON response.
-    c. For any protected request (e.g., `Create Event`), go to the **Authorization** tab.
-    d. Select **Type: Bearer Token** and paste the copied token into the "Token" field on the right.
+# test coverage
+$ npm run test:cov
+```
 
----
+## Resources
 
-##  API Endpoints
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-A brief overview of the available API routes, all of which are pre-configured in the provided Postman collection.
 
-### `Auth`
-
--   `POST /auth/register`: Register a new user.
--   `POST /auth/login`: Log in a user or admin, returns a JWT `access_token`.
--   `GET /auth/profile`: [USER] Get the profile of the logged-in user.
-
-### `Events`
-
--   `GET /events/upcoming`: [PUBLIC] Get a paginated list of upcoming events.
--   `GET /events/past`: [PUBLIC] Get a paginated list of past events.
--   `POST /events/public/find`: [PUBLIC] Get details of a single event by its ID.
--   `GET /events`: [ADMIN] Get a list of all events with registration counts.
--   `POST /events`: [ADMIN] Create a new event (requires `multipart/form-data` for image upload).
--   `PATCH /events`: [ADMIN] Update an event.
--   `DELETE /events`: [ADMIN] Delete an event.
-
-### `Bookings`
-
--   `POST /bookings`: [USER] Book seats for an event.
--   `GET /bookings/my-bookings`: [USER] Get a list of all bookings for the current user.
--   `DELETE /bookings/cancel`: [USER] Cancel a specific booking.

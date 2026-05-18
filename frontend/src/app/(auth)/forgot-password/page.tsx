@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+    <div className="bg-card border border-light-gray rounded-lg shadow-xl p-8 w-full max-w-md">
       <div className="text-left mb-6">
         <h2 className="text-2xl font-bold text-dark-gray">Forgot Password</h2>
         <p className="mt-2 text-sm text-medium-gray">
@@ -55,8 +55,8 @@ export default function ForgotPasswordPage() {
 
       {success ? (
         <div className="space-y-4">
-          <div className="bg-green-50 border border-green-200 p-4 rounded-md">
-            <p className="text-sm text-green-800 text-center">
+          <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900/50 p-4 rounded-md">
+            <p className="text-sm text-green-800 dark:text-green-300 text-center">
               ✓ Verification code sent successfully! Redirecting...
             </p>
           </div>
@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
           <div className="space-y-6">
 
             {error && (
-              <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
+              <p className="form-error text-center bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-3 rounded-md">
                 {error}
               </p>
             )}

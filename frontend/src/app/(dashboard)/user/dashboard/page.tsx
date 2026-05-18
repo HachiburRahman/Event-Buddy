@@ -63,18 +63,18 @@ export default function UserDashboardPage() {
             return (
                 <div className="space-y-4 animate-pulse">
                     {[1, 2].map(i => (
-                        <div key={i} className="flex items-center justify-between p-6 bg-white rounded-lg shadow-sm">
+                        <div key={i} className="flex items-center justify-between p-6 bg-card border border-light-gray rounded-lg shadow-sm">
                             <div className="flex items-center gap-6">
                                 <div className="flex flex-col items-center">
-                                    <div className="h-4 w-10 bg-gray-300 rounded"></div>
-                                    <div className="h-8 w-10 mt-1 bg-gray-200 rounded"></div>
+                                    <div className="h-4 w-10 bg-gray-300 dark:bg-slate-700 rounded"></div>
+                                    <div className="h-8 w-10 mt-1 bg-gray-200 dark:bg-slate-800 rounded"></div>
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="h-5 w-48 bg-gray-300 rounded"></div>
-                                    <div className="h-4 w-64 bg-gray-200 rounded"></div>
+                                    <div className="h-5 w-48 bg-gray-300 dark:bg-slate-700 rounded"></div>
+                                    <div className="h-4 w-64 bg-gray-200 dark:bg-slate-800 rounded"></div>
                                 </div>
                             </div>
-                            <div className="h-10 w-32 bg-gray-300 rounded-lg"></div>
+                            <div className="h-10 w-32 bg-gray-300 dark:bg-slate-700 rounded-lg"></div>
                         </div>
                     ))}
                 </div>
@@ -100,7 +100,7 @@ export default function UserDashboardPage() {
                     const { event } = booking;
                     const { month, day, dayName, time } = formatDate(event.date);
                     return (
-                        <div key={booking.id} className="bg-white p-6 rounded-lg shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div key={booking.id} className="bg-card border border-light-gray p-6 rounded-lg shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
                             <div className="flex items-center gap-6">
                                 <div className="text-center flex-shrink-0 w-16">
                                     <p className="text-primary-blue font-bold">{month}</p>

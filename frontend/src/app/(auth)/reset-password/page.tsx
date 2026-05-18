@@ -93,7 +93,7 @@ function ResetPasswordForm() {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+    <div className="bg-card border border-light-gray rounded-lg shadow-xl p-8 w-full max-w-md">
       <div className="text-left mb-6">
         <h2 className="text-2xl font-bold text-dark-gray">Reset Your Password</h2>
         <p className="mt-2 text-sm text-medium-gray">
@@ -106,7 +106,7 @@ function ResetPasswordForm() {
         <div className="space-y-6">
 
           {error && (
-            <p className="form-error text-center bg-red-50 border border-red-200 p-3 rounded-md">
+            <p className="form-error text-center bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-3 rounded-md">
               {error}
             </p>
           )}
@@ -131,7 +131,7 @@ function ResetPasswordForm() {
                 type="button"
                 onClick={handleVerifyCode}
                 disabled={verifyingCode || resetCode.length !== 6}
-                className="w-full mt-2 px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-full mt-2 px-4 py-2 text-sm bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 rounded-md hover:bg-gray-200 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {verifyingCode ? 'Verifying...' : 'Verify Code'}
               </button>
@@ -213,10 +213,8 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <Suspense fallback={<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-blue"></div>}>
-        <ResetPasswordForm />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-blue"></div>}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

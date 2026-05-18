@@ -1,121 +1,36 @@
-# Event Buddy - Frontend
-
-This is the frontend for Event Buddy, a full-stack event booking platform built with Next.js, TypeScript, and Tailwind CSS. This application provides a complete user experience, from browsing events to booking seats and managing events through a dedicated admin dashboard.
-
----
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-Follow these instructions to get the frontend development environment set up and running on your local machine.
+First, run the development server:
 
-### Prerequisites
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- [Node.js](https://nodejs.org/) (v18.x or later is recommended)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-- A running instance of the **[Event Buddy Backend](https://github.com/JALAL-00/Event-Buddy---Deepchain-Labs-Internship-Technical-Test/tree/main/backend)**. *This frontend will not function without it.*
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Installation & Setup
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/JALAL-00/Event-Buddy-Event-Management-System.git
-    ```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Geist Sans and Geist Mono, our custom sans-serif and monospace fonts.
 
-2.  **Navigate to the frontend directory:**
-    ```bash
-    cd Event-Buddy-Event-Management-System/frontend
-    ```
+## Learn More
 
-3.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+To learn more about Next.js, take a look at the following resources:
 
-4.  **Set up environment variables:**
-    Create a new file named `.env.local` in the `frontend` directory.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-    ```bash
-    touch .env.local
-    ```
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-    Add the following line to the `.env.local` file. This tells the Next.js application where to send API requests.
+## Deploy on Vercel
 
-    ```plaintext
-    NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
-    ```
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-5.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
-
-6.  **Open the application:**
-    Open your browser and navigate to [http://localhost:3001](http://localhost:3001) to see the application in action.
-
----
-
-## Admin Credentials
-
-To access the admin dashboard, use the credentials seeded by the backend application:
-
-- **Email:** `admin.jalal@gmail.com`
-- **Password:** `AdminJalal123@`
-
-_Note: To change the default admin credentials, edit the variables in `backend/src/seed/seed.service.ts` and reset the database._
-
-### Regular User Account (Manual Registration)
-To test as a regular user, you must first register a new account.
-
----- Here is a demo for regiter & login ----
-
-**1. Enter the following details:**
-- **Full Name:** `Jalal Uddin`
-- **Email:** `jalaluddin0046@gmail.com`
-- **Password:** `ValidPassword123@`
-
-After registering, the application will automatically log you in and redirect you to the user dashboard. You can then log out and log back in using this email and password.
-
-### Regular User Account (Manual Login)
-
-**1. Enter the following details:**
-- **Email:** `jalaluddin0046@gmail.com`
-- **Password:** `ValidPassword123@`
-
----
-
-## Features
-
-This application implements the full feature set required by the project specification, with clear separation between public, user, and admin functionalities.
-
-### Public Features (Unauthenticated Users)
-- **Homepage:** Displays beautifully designed lists of upcoming and past events.
-- **Event Discovery:** A hero section with a search bar to find events.
-- **Event Details Page:** View full event details including description, date, location, and remaining spots.
-- **Login/Signup Prompt:** The "Book Now" button on the details page prompts users to log in or sign up before proceeding.
-
-### User Features (Authenticated Users)
-- **Secure Authentication:** JWT-based authentication flow with login and registration.
-- **Seat Booking:** Users can book between 1 to 4 seats for any upcoming event.
-- **Booking Validation:** Logic prevents booking for past events or if available seats are exceeded.
-- **User Dashboard:** A personal dashboard to view all registered events.
-- **Cancel Bookings:** Users can cancel their registration for an event from their dashboard.
-
-### Admin Features (Authenticated Admin Users)
-- **Role-Based Access Control:** The admin dashboard is protected and accessible only to users with the 'ADMIN' role.
-- **Event Management Dashboard:** A comprehensive table view listing all events with key details and management actions.
-- **Full CRUD Functionality:**
-    - **Create:** Create new events via a rich form inside a modal, including image uploads.
-    - **Read:** View all events in the dashboard and view individual event details on the public page.
-    - **Update:** Edit existing event details using the same reusable form.
-    - **Delete:** Securely delete events with a confirmation prompt.
-
-## Technology Stack
-
-This project leverages a modern, type-safe, and performant technology stack.
-
-- **Framework:** [Next.js](https://nextjs.org/) (v14+ with App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **API Communication:** [Axios](https://axios-http.com/)
-- **State Management:** React Context API (for authentication)
-- **Linting & Formatting:** ESLint & Prettier (included with Next.js)
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
