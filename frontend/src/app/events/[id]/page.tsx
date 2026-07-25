@@ -64,8 +64,12 @@ export default function EventDetailPage() {
     setIsBooking(true);
     setBookingError(null);
     try {
-        await api.post('/bookings', { eventId: event.id, numberOfSeats: selectedSeats });
-        router.push('/user/dashboard');
+        const { data } = await api.post('/bookings', { eventId: event.id, numberOfSeats: selectedSeats });
+        if (data.checkoutUrl) {
+            window.location.href = data.checkoutUrl;
+        } else {
+            router.push('/user/dashboard');
+        }
     } catch (err: any) {
         const message = err.response?.data?.message || 'An unexpected error occurred.';
         setBookingError(message);
@@ -111,22 +115,26 @@ export default function EventDetailPage() {
         </Link>
         
         <article>
-          <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden shadow-lg"><Image src={imageUrl} alt={event.title} layout="fill" objectFit="cover" /></div>
+          <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden shadow-lg"><Image src={imageUrl} alt={event.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ objectFit: 'cover' }} /></div>
           <div className="mt-8 flex flex-wrap gap-2">{event.tags.map(tag => (<span key={tag} className="px-3 py-1 text-sm font-semibold text-primary-blue bg-indigo-100 rounded-full">{tag}</span>))}</div>
           <h1 className="mt-4 text-3xl md:text-4xl font-extrabold text-dark-gray">{event.title}</h1>
           
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-8 p-6 bg-white rounded-lg shadow-sm border border-light-gray">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 my-8 p-6 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-light-gray dark:border-gray-800">
               <div className="flex items-center gap-4">
-                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg></div>
-                  <div><h4 className="font-semibold text-dark-gray">Date</h4><p className="text-sm text-medium-gray">{formattedDate.full}</p></div>
+                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-950/30 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray dark:text-gray-200">Date</h4><p className="text-sm text-medium-gray">{formattedDate.full}</p></div>
               </div>
               <div className="flex items-center gap-4">
-                   <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
-                  <div><h4 className="font-semibold text-dark-gray">Time</h4><p className="text-sm text-medium-gray">{formattedDate.time}</p></div>
+                   <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-950/30 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray dark:text-gray-200">Time</h4><p className="text-sm text-medium-gray">{formattedDate.time}</p></div>
               </div>
               <div className="flex items-center gap-4">
-                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
-                  <div><h4 className="font-semibold text-dark-gray">Location</h4><p className="text-sm text-medium-gray">{event.location}</p></div>
+                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-950/30 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray dark:text-gray-200">Location</h4><p className="text-sm text-medium-gray">{event.location}</p></div>
+              </div>
+              <div className="flex items-center gap-4">
+                  <div className="grid place-items-center h-12 w-12 rounded-lg bg-indigo-100 dark:bg-indigo-950/30 text-primary-blue"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 6v12"></path></svg></div>
+                  <div><h4 className="font-semibold text-dark-gray dark:text-gray-200">Ticket Price</h4><p className="text-sm text-medium-gray">{event.price && Number(event.price) > 0 ? `$${Number(event.price).toFixed(2)}` : 'Free'}</p></div>
               </div>
           </div>
           
@@ -145,7 +153,22 @@ export default function EventDetailPage() {
                       </button>
                   ))}
                 </div>
-                <div className="mt-8 text-center"><button onClick={handleBooking} disabled={isBooking} className="form-btn-primary px-10 py-3">{isBooking ? 'Booking...' : `Book ${selectedSeats} ${selectedSeats === 1 ? 'Seat' : 'Seats'}`}</button></div>
+                <div className="mt-8 flex flex-col items-center">
+                  {event.price && Number(event.price) > 0 ? (
+                    <div className="bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-5 mb-6 w-full max-w-sm text-center">
+                      <p className="text-xl font-bold text-dark-gray dark:text-gray-200 mb-2">
+                        Total: ${(Number(event.price) * selectedSeats).toFixed(2)}
+                      </p>
+                      <div className="flex items-center justify-center gap-2 text-sm text-medium-gray dark:text-gray-400 font-medium mt-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-500"><rect width="20" height="14" x="2" y="5" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                        Secure payment via Stripe
+                      </div>
+                    </div>
+                  ) : null}
+                  <button onClick={handleBooking} disabled={isBooking} className="form-btn-primary px-10 py-3 w-full max-w-sm">
+                    {isBooking ? 'Processing...' : event.price && Number(event.price) > 0 ? `Pay & Book ${selectedSeats} ${selectedSeats === 1 ? 'Seat' : 'Seats'}` : `Confirm Booking`}
+                  </button>
+                </div>
                  {bookingError && <p className="mt-4 text-center text-danger-red">{bookingError}</p>}
             </div>
           )}

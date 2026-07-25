@@ -20,7 +20,7 @@ import { MailController } from './mail.controller';
             },
           },
           defaults: {
-            from: `"Event Buddy" <${configService.get<string>('EMAIL_USER')}>`,
+            from: `"Event Lounge" <${configService.get<string>('EMAIL_USER')}>`,
           },
         };
       },

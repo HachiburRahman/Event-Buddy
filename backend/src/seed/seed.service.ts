@@ -31,10 +31,10 @@ export class SeedService implements OnModuleInit {
     }
 
     const oldAdminExists = await this.userRepository.findOne({
-      where: { email: 'admin@eventbuddy.com' },
+      where: { email: 'admin@eventlounge.com' },
     });
     if (oldAdminExists) {
-      console.warn('WARNING: An old admin account ("admin@eventbuddy.com") exists. Please remove it manually for security.');
+      console.warn('WARNING: An old admin account ("admin@eventlounge.com") exists. Please remove it manually for security.');
     }
 
     const saltRounds = 10;

@@ -67,6 +67,7 @@ export default function AdminDashboardPage() {
                             <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Title</th>
                             <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Date</th>
                             <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Location</th>
+                            <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Price</th>
                             <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Registrations</th>
                             <th scope="col" className="p-4 text-left text-xs font-semibold text-medium-gray uppercase tracking-wider">Actions</th>
                         </tr>
@@ -77,6 +78,7 @@ export default function AdminDashboardPage() {
                                 <td className="p-4 whitespace-nowrap text-sm font-medium text-dark-gray">{event.title}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{formatDate(event.date)}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.location}</td>
+                                <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.price && Number(event.price) > 0 ? `$${Number(event.price).toFixed(2)}` : 'Free'}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-medium-gray">{event.bookedSeats} / {event.capacity}</td>
                                 <td className="p-4 whitespace-nowrap text-sm font-medium">
                                     <div className="flex items-center space-x-4">

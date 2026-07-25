@@ -8,6 +8,7 @@ import { SeedModule } from './seed/seed.module';
 import { EventsModule } from './events/events.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { MailModule } from './mail/mail.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { MailModule } from './mail/mail.module';
     EventsModule,
     BookingsModule,
     MailModule,
+    PaymentsModule,
 
   ],
   controllers: [AppController],

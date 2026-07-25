@@ -8,6 +8,7 @@ import {
   Min,
   IsOptional,
   IsArray,
+  IsNumber,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -60,6 +61,16 @@ export class CreateEventDto {
   @IsInt()
   @Min(1)
   capacity: number;
+
+  @ApiPropertyOptional({
+    example: 25.00,
+    description: 'Price of the event ticket (USD)',
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  price?: number;
 
   @ApiPropertyOptional({
     example: ['technology', 'conference', 'innovation'],

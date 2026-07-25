@@ -31,8 +31,9 @@ const Navbar = () => {
 
       return (
         <div className="flex items-center space-x-4">
-          <Link href={dashboardHref} className="text-dark-gray hover:text-primary-blue font-semibold transition-colors">
-            Hello, {displayName}
+          <Link href={dashboardHref} className="px-4 py-2 text-sm font-semibold text-primary-blue bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            Dashboard
           </Link>
           <ThemeToggle />
           <button
@@ -69,7 +70,7 @@ const Navbar = () => {
           <div className="flex-shrink-0 group">
             <Link href="/" className="flex items-center space-x-2">
                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary-blue group-hover:scale-110 transition-transform duration-300"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-              <span className="font-bold text-xl text-dark-gray bg-clip-text">Event buddy.</span>
+              <span className="font-bold text-xl text-dark-gray bg-clip-text">Event Lounge.</span>
             </Link>
           </div>
           <div className="hidden md:block">

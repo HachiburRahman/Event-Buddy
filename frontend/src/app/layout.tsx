@@ -8,7 +8,7 @@ import { ThemeProvider } from '@/components/ui/ThemeProvider';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Event Buddy",
+  title: "Event Lounge",
   description: "Discover and book amazing events.",
 };
 

@@ -113,6 +113,23 @@ export default function UserDashboardPage() {
                                         <span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>{time}</span>
                                         <span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{event.location}</span>
                                     </div>
+                                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                                        <span className="text-xs font-semibold px-2 py-1 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-md">
+                                            Seats: {booking.numberOfSeats}
+                                        </span>
+                                        <span className="text-xs font-semibold px-2 py-1 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 rounded-md">
+                                            Price: {event.price && Number(event.price) > 0 ? `$${(Number(event.price) * booking.numberOfSeats).toFixed(2)}` : 'Free'}
+                                        </span>
+                                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold font-mono ${
+                                            booking.paymentStatus === 'PAID' 
+                                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400' 
+                                                : booking.paymentStatus === 'PENDING'
+                                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400'
+                                                : 'bg-rose-100 text-rose-800 dark:bg-rose-950/30 dark:text-rose-400'
+                                        }`}>
+                                            {booking.paymentStatus}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <button

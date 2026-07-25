@@ -22,7 +22,7 @@ type EventFormProps = {
 
 const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFormProps) => {
     const [formData, setFormData] = useState<EventFormData>({
-        title: '', description: '', date: '', time: '', location: '', capacity: 100, tags: '', imageUrl: '', image: null,
+        title: '', description: '', date: '', time: '', location: '', capacity: 100, price: 0, tags: '', imageUrl: '', image: null,
     });
     const [imagePreview, setImagePreview] = useState<string | null>(initialData?.imageUrl || null);
     const [error, setError] = useState<string>('');
@@ -40,6 +40,7 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
                 time: timeStr,
                 location: initialData.location,
                 capacity: initialData.capacity,
+                price: initialData.price || 0,
                 tags: initialData.tags.join(', '),
                 imageUrl: initialData.imageUrl,
                 image: null,
@@ -77,6 +78,7 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
         data.append('time', formData.time);
         data.append('location', formData.location);
         data.append('capacity', String(formData.capacity));
+        data.append('price', String(formData.price));
         data.append('tags', formData.tags);
 
         if (formData.image) { data.append('image', formData.image); }
@@ -92,15 +94,16 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
                  <div className="md:col-span-2"><label htmlFor="description" className="form-label">Description</label><textarea name="description" id="description" rows={3} className="form-input" value={formData.description} onChange={handleChange}></textarea></div>
                  <div className="md:col-span-2"><label htmlFor="location" className="form-label">Event Location</label><input type="text" name="location" id="location" className="form-input" value={formData.location} onChange={handleChange} required /></div>
                  <div><label htmlFor="capacity" className="form-label">Capacity</label><input type="number" name="capacity" id="capacity" className="form-input" value={formData.capacity} onChange={handleChange} min="1" /></div>
-                 <div><label htmlFor="tags" className="form-label">Tags (comma separated)</label><input type="text" name="tags" id="tags" className="form-input" value={formData.tags} onChange={handleChange} /></div>
+                 <div><label htmlFor="price" className="form-label">Price (USD)</label><input type="number" name="price" id="price" className="form-input" value={formData.price} onChange={handleChange} min="0" step="0.01" /></div>
+                 <div className="md:col-span-2"><label htmlFor="tags" className="form-label">Tags (comma separated)</label><input type="text" name="tags" id="tags" className="form-input" value={formData.tags} onChange={handleChange} /></div>
              </div>
              <div>
                 <label className="form-label">Image</label>
-                <div className="mt-1 flex flex-col items-center justify-center p-4 border-2 border-gray-300 border-dashed rounded-md">
+                <div className="mt-1 flex flex-col items-center justify-center p-4 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md bg-transparent">
                     {imagePreview && <div className="relative h-24 w-48 mb-2"><Image src={imagePreview} alt="Preview" layout="fill" objectFit="contain" /></div>}
-                    <span className="text-sm text-gray-600">Drag or <label htmlFor="image-upload" className="cursor-pointer font-medium text-primary-blue hover:underline">upload</label> the picture here</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Drag or <label htmlFor="image-upload" className="cursor-pointer font-medium text-primary-blue hover:underline">upload</label> the picture here</span>
                     <input id="image-upload" name="image-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/png, image/jpeg" />
-                    <p className="text-xs text-gray-500 mt-1">Max. 5MB | JPG, PNG</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Max. 5MB | JPG, PNG</p>
                 </div>
             </div>
             {error && <p className="form-error text-center">{error}</p>}

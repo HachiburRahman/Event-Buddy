@@ -42,17 +42,17 @@ const Modal = ({ isOpen, onClose, children, title }: ModalProps) => {
     >
       <div
         ref={modalRef}
-        className="bg-white rounded-lg shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] transform transition-all"
+        className="bg-white dark:bg-card rounded-lg shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] transform transition-all border border-transparent dark:border-light-gray"
       >
 
-        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+        <div className="flex items-center justify-between p-4 md:p-5 border-b dark:border-light-gray rounded-t">
           <h3 id="modal-title" className="text-xl font-semibold text-dark-gray">
             {title}
           </h3>
           <button
             onClick={onClose}
             type="button"
-            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-slate-700 dark:hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
             aria-label="Close modal"
           >
             <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">

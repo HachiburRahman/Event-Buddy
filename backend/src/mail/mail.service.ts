@@ -52,7 +52,7 @@ export class MailService {
                   <p>Please arrive at least 15 minutes before the event starts. Don't forget to bring your confirmation email!</p>
               </div>
               <div class="footer">
-                  <p>This is an automated message from Event Buddy.</p>
+                  <p>This is an automated message from Event Lounge.</p>
                   <p>If you didn't make this booking, please contact us immediately.</p>
               </div>
           </div>
@@ -111,10 +111,10 @@ export class MailService {
                           <li>If you didn't request this, ignore this email</li>
                       </ul>
                   </div>
-                  <p>If you're having trouble, contact us at <a href="mailto:support@eventbuddy.com">support@eventbuddy.com</a></p>
+                  <p>If you're having trouble, contact us at <a href="mailto:support@eventlounge.com">support@eventlounge.com</a></p>
               </div>
               <div class="footer">
-                  <p>This is an automated message from Event Buddy.</p>
+                  <p>This is an automated message from Event Lounge.</p>
                   <p>If you didn't request a password reset, please ignore this email.</p>
               </div>
           </div>
@@ -124,7 +124,7 @@ export class MailService {
 
     await this.mailerService.sendMail({
       to: email,
-      subject: 'Password Reset Request - Event Buddy',
+      subject: 'Password Reset Request - Event Lounge',
       html,
     });
   }

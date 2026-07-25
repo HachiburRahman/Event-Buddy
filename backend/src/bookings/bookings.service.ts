@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../events/entities/event.entity';
@@ -6,6 +6,7 @@ import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { User } from 'src/auth/entities/user.entity';
 import { MailService } from 'src/mail/mail.service';
+import { PaymentsService } from '../payments/payments.service';
 
 @Injectable()
 export class BookingsService {
@@ -15,9 +16,11 @@ export class BookingsService {
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
     private readonly mailService: MailService,
+    @Inject(forwardRef(() => PaymentsService))
+    private readonly paymentsService: PaymentsService,
   ) {}
 
-  async create(createBookingDto: CreateBookingDto, currentUser: User): Promise<Booking> {
+  async create(createBookingDto: CreateBookingDto, currentUser: User): Promise<any> {
     const { eventId, numberOfSeats } = createBookingDto;
     const event = await this.eventRepository.findOneBy({ id: eventId });
     if (!event) throw new NotFoundException(`Event with ID "${eventId}" not found`);
@@ -33,15 +36,29 @@ export class BookingsService {
     if (numberOfSeats > availableSeats)
       throw new BadRequestException(`Not enough seats available. Only ${availableSeats} seats left.`);
 
+    const isPaidEvent = event.price && Number(event.price) > 0;
+
     const newBooking = this.bookingRepository.create({
       event,
       user: currentUser,
       numberOfSeats,
+      paymentStatus: isPaidEvent ? 'PENDING' : 'PAID',
+      amountPaid: 0,
     });
 
     const savedBooking = await this.bookingRepository.save(newBooking);
 
-    // Send booking confirmation email
+    if (isPaidEvent) {
+      const checkoutUrl = await this.paymentsService.createCheckoutSession(
+        savedBooking.id,
+        event.title,
+        Number(event.price),
+        numberOfSeats,
+      );
+      return { booking: savedBooking, checkoutUrl };
+    }
+
+    // Send booking confirmation email for free events
     await this.mailService.sendBookingConfirmation(
       currentUser.email,
       currentUser.fullName,
@@ -51,7 +68,38 @@ export class BookingsService {
       numberOfSeats,
     );
 
-    return savedBooking;
+    return { booking: savedBooking };
+  }
+
+  async completePayment(bookingId: string, stripeSessionId: string, amountPaid: number): Promise<void> {
+    const booking = await this.bookingRepository.findOne({
+      where: { id: bookingId },
+      relations: { event: true, user: true },
+    });
+
+    if (!booking) {
+      throw new NotFoundException(`Booking with ID "${bookingId}" not found`);
+    }
+
+    if (booking.paymentStatus === 'PAID') {
+      return;
+    }
+
+    booking.paymentStatus = 'PAID';
+    booking.stripeSessionId = stripeSessionId;
+    booking.amountPaid = amountPaid;
+
+    await this.bookingRepository.save(booking);
+
+    // Send booking confirmation email for paid events upon payment completion
+    await this.mailService.sendBookingConfirmation(
+      booking.user.email,
+      booking.user.fullName,
+      booking.event.title,
+      booking.event.date,
+      booking.event.location,
+      booking.numberOfSeats,
+    );
   }
 
   async findMyBookings(currentUser: User): Promise<Booking[]> {
@@ -78,6 +126,17 @@ export class BookingsService {
     if (new Date(fullBooking.event.date) < new Date())
       throw new BadRequestException('You cannot cancel a booking for an event that has already passed.');
 
+    await this.bookingRepository.remove(booking);
+  }
+
+  async cancelPendingBooking(bookingId: string): Promise<void> {
+    const booking = await this.bookingRepository.findOne({ where: { id: bookingId } });
+    if (!booking) {
+      throw new NotFoundException(`Booking with ID "${bookingId}" not found`);
+    }
+    if (booking.paymentStatus !== 'PENDING') {
+      throw new BadRequestException('Only pending bookings can be cancelled this way.');
+    }
     await this.bookingRepository.remove(booking);
   }
 }

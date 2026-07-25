@@ -9,6 +9,7 @@ export interface IEvent {
   capacity: number;
   tags: string[];
   imageUrl?: string;
+  price: number;
   createdAt: string;
   updatedAt: string;
 
@@ -43,5 +44,8 @@ export interface IBooking {
   createdAt: string;
   userId: string;
   eventId: string;
+  paymentStatus: 'PENDING' | 'PAID' | 'CANCELLED';
+  stripeSessionId?: string | null;
+  amountPaid: number;
   event: IEvent; 
 }

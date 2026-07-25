@@ -20,6 +20,15 @@ export class Booking {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({ type: 'varchar', default: 'PAID' })
+  paymentStatus: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  stripeSessionId: string | null;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  amountPaid: number;
+
   @ManyToOne(() => User, (user) => user.bookings, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;

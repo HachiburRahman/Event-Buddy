@@ -7,7 +7,7 @@ import { AccessTokenGuard } from './common/guards/accessToken.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
   const reflector = new Reflector();
 
   app.useGlobalGuards(new AccessTokenGuard(reflector));
@@ -32,13 +32,14 @@ async function bootstrap() {
 
   // Swagger Configuration
   const config = new DocumentBuilder()
-    .setTitle('Event Buddy API')
-    .setDescription('Event Management System API - Complete documentation for Event Buddy backend')
+    .setTitle('Event Lounge API')
+    .setDescription('Event Management System API - Complete documentation for Event Lounge backend')
     .setVersion('1.0')
     .addTag('Auth', 'Authentication endpoints')
     .addTag('Events', 'Event management endpoints')
     .addTag('Bookings', 'Event booking endpoints')
     .addTag('Mail', 'Email notification endpoints')
+    .addTag('Payments', 'Stripe payment endpoints')
     .addBearerAuth(
       {
         type: 'http',

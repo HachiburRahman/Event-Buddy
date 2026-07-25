@@ -7,7 +7,9 @@ import {
   HttpStatus,
   Get,
   Delete,
+  Param,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { DeleteBookingDto } from './dto/delete-booking.dto';
@@ -59,5 +61,16 @@ export class BookingsController {
   @ApiResponse({ status: 403, description: 'Forbidden - can only cancel own bookings' })
   cancel(@Body() deleteBookingDto: DeleteBookingDto, @GetCurrentUser() currentUser: User) {
     return this.bookingsService.cancelBooking(deleteBookingDto.bookingId, currentUser);
+  }
+
+  @Public()
+  @Delete('cancel-pending/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Cancel a pending (unpaid) booking after Stripe checkout cancellation' })
+  @ApiResponse({ status: 204, description: 'Pending booking cancelled successfully' })
+  @ApiResponse({ status: 400, description: 'Booking is not in PENDING status' })
+  @ApiResponse({ status: 404, description: 'Booking not found' })
+  cancelPending(@Param('id') id: string) {
+    return this.bookingsService.cancelPendingBooking(id);
   }
 }
