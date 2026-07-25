@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',
@@ -35,9 +35,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,

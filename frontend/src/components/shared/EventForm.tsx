@@ -100,7 +100,7 @@ const EventForm = ({ mode, initialData, onSubmit, onCancel, isLoading }: EventFo
              <div>
                 <label className="form-label">Image</label>
                 <div className="mt-1 flex flex-col items-center justify-center p-4 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-md bg-transparent">
-                    {imagePreview && <div className="relative h-24 w-48 mb-2"><Image src={imagePreview} alt="Preview" layout="fill" objectFit="contain" /></div>}
+                    {imagePreview && <div className="relative h-24 w-48 mb-2"><Image src={imagePreview} alt="Preview" fill style={{ objectFit: 'contain' }} /></div>}
                     <span className="text-sm text-gray-600 dark:text-gray-400">Drag or <label htmlFor="image-upload" className="cursor-pointer font-medium text-primary-blue hover:underline">upload</label> the picture here</span>
                     <input id="image-upload" name="image-upload" type="file" className="sr-only" onChange={handleFileChange} accept="image/png, image/jpeg" />
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Max. 5MB | JPG, PNG</p>

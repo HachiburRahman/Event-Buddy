@@ -31,9 +31,9 @@ const EventCard = ({ event }: EventCardProps) => {
           <Image
             src={imageUrl}
             alt={event.title}
-            layout="fill"
-            objectFit="cover"
-            onLoadingComplete={(image) => image.classList.remove("opacity-0")}
+            fill
+            style={{ objectFit: 'cover' }}
+            onLoad={(e) => (e.target as HTMLImageElement).classList.remove("opacity-0")}
             className="transition-opacity duration-300 opacity-0"
           />
         </div>
