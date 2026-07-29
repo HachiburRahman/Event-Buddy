@@ -8,6 +8,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entities/event.entity';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { Booking } from '../bookings/entities/booking.entity';
+import { whereHoldsASeat } from '../bookings/booking-seats';
 
 @Injectable()
 export class EventsService {
@@ -24,11 +25,13 @@ export class EventsService {
     }
     const eventIds = events.map(event => event.id);
 
-    const bookingCounts = await this.bookingRepository
-      .createQueryBuilder('booking')
-      .select('booking.eventId', 'eventId')
-      .addSelect('SUM(booking.numberOfSeats)', 'totalBooked')
-      .where('booking.eventId IN (:...eventIds)', { eventIds })
+    const bookingCounts = await whereHoldsASeat(
+      this.bookingRepository
+        .createQueryBuilder('booking')
+        .select('booking.eventId', 'eventId')
+        .addSelect('SUM(booking.numberOfSeats)', 'totalBooked')
+        .where('booking.eventId IN (:...eventIds)', { eventIds }),
+    )
       .groupBy('booking.eventId')
       .getRawMany();
 
@@ -145,11 +148,12 @@ export class EventsService {
       throw new NotFoundException(`Event with ID "${id}" not found`);
     }
 
-    const result = await this.bookingRepository
+    const result = await whereHoldsASeat(
+      this.bookingRepository
         .createQueryBuilder('booking')
         .select('SUM(booking.numberOfSeats)', 'totalBooked')
-        .where('booking.eventId = :id', { id })
-        .getRawOne();
+        .where('booking.eventId = :id', { id }),
+    ).getRawOne();
         
     const bookedSeats = parseInt(result?.totalBooked, 10) || 0;
     return { ...event, bookedSeats, spotsLeft: event.capacity - bookedSeats };

@@ -7,6 +7,7 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { User } from 'src/auth/entities/user.entity';
 import { MailService } from 'src/mail/mail.service';
 import { PaymentsService } from '../payments/payments.service';
+import { whereHoldsASeat } from './booking-seats';
 
 @Injectable()
 export class BookingsService {
@@ -26,11 +27,12 @@ export class BookingsService {
     if (!event) throw new NotFoundException(`Event with ID "${eventId}" not found`);
     if (new Date(event.date) < new Date()) throw new BadRequestException('Cannot book a past event.');
 
-    const { totalBookedSeats } = await this.bookingRepository
-      .createQueryBuilder('booking')
-      .select('SUM(booking.numberOfSeats)', 'totalBookedSeats')
-      .where('booking.eventId = :eventId', { eventId })
-      .getRawOne();
+    const { totalBookedSeats } = await whereHoldsASeat(
+      this.bookingRepository
+        .createQueryBuilder('booking')
+        .select('SUM(booking.numberOfSeats)', 'totalBookedSeats')
+        .where('booking.eventId = :eventId', { eventId }),
+    ).getRawOne();
 
     const availableSeats = event.capacity - (totalBookedSeats || 0);
     if (numberOfSeats > availableSeats)
@@ -49,13 +51,22 @@ export class BookingsService {
     const savedBooking = await this.bookingRepository.save(newBooking);
 
     if (isPaidEvent) {
-      const checkoutUrl = await this.paymentsService.createCheckoutSession(
-        savedBooking.id,
-        event.title,
-        Number(event.price),
-        numberOfSeats,
-      );
-      return { booking: savedBooking, checkoutUrl };
+      // The row is already written, so a throw here would strand it at PENDING
+      // holding seats nobody paid for. Nothing else cleans it up: the
+      // /booking/cancel page only runs when Stripe redirects back, which cannot
+      // happen if the session was never created.
+      try {
+        const checkoutUrl = await this.paymentsService.createCheckoutSession(
+          savedBooking.id,
+          event.title,
+          Number(event.price),
+          numberOfSeats,
+        );
+        return { booking: savedBooking, checkoutUrl };
+      } catch (error) {
+        await this.bookingRepository.remove(savedBooking);
+        throw error;
+      }
     }
 
     // Send booking confirmation email for free events

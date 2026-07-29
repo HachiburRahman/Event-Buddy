@@ -1,14 +1,15 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
+import { requireStripeSecretKey } from '../config/stripe.config';
+import { PENDING_BOOKING_GRACE_MS } from '../bookings/booking-seats';
 
 @Injectable()
 export class PaymentsService {
   private stripe: Stripe;
 
   constructor(private readonly configService: ConfigService) {
-    const stripeSecretKey = this.configService.get<string>('STRIPE_SECRET_KEY');
-    this.stripe = new Stripe(stripeSecretKey || 'sk_test_mock_placeholder', {});
+    this.stripe = new Stripe(requireStripeSecretKey(this.configService), {});
   }
 
   async createCheckoutSession(
@@ -39,6 +40,11 @@ export class PaymentsService {
         mode: 'payment',
         success_url: `${frontendUrl}/booking/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${frontendUrl}/booking/cancel?booking_id=${bookingId}`,
+        // The seats behind this booking are released once the grace window
+        // passes, so the session has to die at the same moment. Stripe's default
+        // is 24 hours, which would let someone pay long after their hold was
+        // handed to another buyer and oversell the event.
+        expires_at: Math.floor((Date.now() + PENDING_BOOKING_GRACE_MS) / 1000),
         metadata: {
           bookingId: bookingId,
         },
