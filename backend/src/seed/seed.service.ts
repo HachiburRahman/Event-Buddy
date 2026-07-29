@@ -11,7 +11,7 @@ export class SeedService implements OnModuleInit {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     await this.seedAdmin();
@@ -19,7 +19,7 @@ export class SeedService implements OnModuleInit {
 
   private async seedAdmin() {
     const adminEmail = 'hachiburrahman15@gmail.com';
-    const adminPassword = 'AdminHachib123@';
+    const adminPassword = 'Hachib@1234';
 
     const adminExists = await this.userRepository.findOne({
       where: { email: adminEmail },
