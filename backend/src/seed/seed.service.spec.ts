@@ -1,31 +1,41 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { SeedService } from './seed.service';
 import { User } from '../auth/entities/user.entity';
 import { Event } from '../events/entities/event.entity';
+import { UserRole } from '../common/enums/user-role.enum';
 import { SEED_EVENTS } from './events.seed';
 
 describe('SeedService', () => {
   let service: SeedService;
   let eventRepository: { count: jest.Mock; create: jest.Mock; save: jest.Mock };
-  let userRepository: { findOne: jest.Mock; create: jest.Mock; save: jest.Mock };
+  let userRepository: { findOne: jest.Mock; create: jest.Mock; save: jest.Mock; update: jest.Mock };
+  let config: Record<string, string | undefined>;
+
+  // The seeder looks up the old admin address first, then the configured one.
+  // This lets a test describe just the configured admin row.
+  const withAdminRow = (row: Partial<User> | null) =>
+    jest.fn(async (options: any) => (options?.where?.email === 'admin@eventlounge.com' ? null : row));
 
   beforeEach(async () => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
     jest.spyOn(console, 'warn').mockImplementation(() => {});
 
+    config = { ADMIN_EMAIL: 'admin@example.com', ADMIN_PASSWORD: 'configured-password' };
+
     eventRepository = {
-      count: jest.fn(),
+      count: jest.fn().mockResolvedValue(6), // events already present unless a test says otherwise
       create: jest.fn((dto) => dto),
       save: jest.fn(async (rows) => rows),
     };
 
     userRepository = {
-      // An admin already exists, so seedAdmin() short-circuits and these tests
-      // stay focused on the event seeder.
-      findOne: jest.fn().mockResolvedValue({ id: 'existing-admin' }),
-      create: jest.fn(),
-      save: jest.fn(),
+      findOne: withAdminRow(null),
+      create: jest.fn((dto) => dto),
+      save: jest.fn(async (row) => row),
+      update: jest.fn(async () => ({ affected: 1 })),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -33,6 +43,7 @@ describe('SeedService', () => {
         SeedService,
         { provide: getRepositoryToken(User), useValue: userRepository },
         { provide: getRepositoryToken(Event), useValue: eventRepository },
+        { provide: ConfigService, useValue: { get: (key: string) => config[key] } },
       ],
     }).compile();
 
@@ -43,6 +54,82 @@ describe('SeedService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('admin seeding', () => {
+    it('creates the admin when the database has no matching user', async () => {
+      await service.onModuleInit();
+
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      const created = userRepository.save.mock.calls[0][0];
+      expect(created.email).toBe('admin@example.com');
+      expect(created.role).toBe(UserRole.ADMIN);
+      await expect(bcrypt.compare('configured-password', created.password)).resolves.toBe(true);
+    });
+
+    it('updates the stored password when it no longer matches the configured one', async () => {
+      // Exactly the production situation: the row was seeded by an earlier
+      // deploy with a different password, so login rejects the current one.
+      userRepository.findOne = withAdminRow({
+        id: 'admin-1',
+        email: 'admin@example.com',
+        role: UserRole.ADMIN,
+        password: await bcrypt.hash('password-from-an-old-deploy', 10),
+      });
+
+      await service.onModuleInit();
+
+      expect(userRepository.update).toHaveBeenCalledTimes(1);
+      const [id, updates] = userRepository.update.mock.calls[0];
+      expect(id).toBe('admin-1');
+      await expect(bcrypt.compare('configured-password', updates.password)).resolves.toBe(true);
+    });
+
+    it('leaves the row alone when the password already matches', async () => {
+      userRepository.findOne = withAdminRow({
+        id: 'admin-1',
+        email: 'admin@example.com',
+        role: UserRole.ADMIN,
+        password: await bcrypt.hash('configured-password', 10),
+      });
+
+      await service.onModuleInit();
+
+      expect(userRepository.update).not.toHaveBeenCalled();
+      expect(userRepository.save).not.toHaveBeenCalled();
+    });
+
+    it('restores the ADMIN role if the account was demoted', async () => {
+      userRepository.findOne = withAdminRow({
+        id: 'admin-1',
+        email: 'admin@example.com',
+        role: UserRole.USER,
+        password: await bcrypt.hash('configured-password', 10),
+      });
+
+      await service.onModuleInit();
+
+      expect(userRepository.update.mock.calls[0][1]).toEqual({ role: UserRole.ADMIN });
+    });
+
+    it('uses ADMIN_EMAIL and ADMIN_PASSWORD from the environment', async () => {
+      config = { ADMIN_EMAIL: 'someone@else.com', ADMIN_PASSWORD: 'from-render' };
+
+      await service.onModuleInit();
+
+      const created = userRepository.save.mock.calls[0][0];
+      expect(created.email).toBe('someone@else.com');
+      await expect(bcrypt.compare('from-render', created.password)).resolves.toBe(true);
+    });
+
+    it('warns loudly when ADMIN_PASSWORD is unset and the committed default is used', async () => {
+      config = {};
+      const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      await service.onModuleInit();
+
+      expect(warn.mock.calls.flat().join(' ')).toContain('ADMIN_PASSWORD is not set');
+    });
   });
 
   describe('event seeding', () => {
