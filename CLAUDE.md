@@ -94,10 +94,34 @@ Feature modules registered in `app.module.ts`: `auth`, `events`, `bookings`, `pa
 
 ---
 
+## Skill routing
+
+When the user's request matches an available skill, invoke it via the Skill tool. When in doubt, invoke the skill.
+
+Key routing rules:
+- Product ideas/brainstorming → invoke /office-hours
+- Strategy/scope → invoke /plan-ceo-review
+- Architecture → invoke /plan-eng-review
+- Design system/plan review → invoke /design-consultation or /plan-design-review
+- Full review pipeline → invoke /autoplan
+- Bugs/errors → invoke /investigate
+- QA/testing site behavior → invoke /qa or /qa-only
+- Code review/diff check → invoke /review
+- Visual polish → invoke /design-review
+- Ship/deploy/PR → invoke /ship or /land-and-deploy
+- Save progress → invoke /context-save
+- Resume context → invoke /context-restore
+- Author a backlog-ready spec/issue → invoke /spec
+
+---
+
 ## Session Log
 
 <!-- Newest first. One entry per response. -->
 
 ### 2026-07-29
 
+- **Fixed production `ERR_CONNECTION_CLOSED`** (`/investigate`). Render sends `Connection: close` on every response, so the browser can reuse a pooled socket exactly as the server closes it; the homepage fires `/events/upcoming` and `/events/past` concurrently, so both died together. Free instances also sleep after ~15 min idle. [lib/axios.ts](frontend/src/lib/axios.ts) now has a 20s timeout and 3 retries with backoff, **GET/HEAD only** unless a request opts in with `retryable: true` — `POST /bookings` must never replay (double booking + double Stripe session). [EventList.tsx](frontend/src/components/shared/EventList.tsx) got a "Try again" button and a cold-start message. Added public `GET /health` ([app.controller.ts](backend/src/app.controller.ts)) for an uptime pinger to keep Render warm. Guarded by `npm run check:retry`, which drops sockets against the real client: 1/4 before, 4/4 after.
+- **Fixed "events show locally but not in production"** (`/investigate`). Not a code bug: local backend talks to `localhost:5432/event_db` (14 events), Render talks to its own database (0 events). A deploy ships code, not data; `synchronize: true` created the tables so the API answered `200 {"total":0}`. Snapshotted the 14 local events into [backend/src/seed/events.seed.ts](backend/src/seed/events.seed.ts) and extended [SeedService](backend/src/seed/seed.service.ts) with `seedEvents()`, guarded on `count() === 0`. Regenerate with `node scripts/export-events.mjs`. **Fixture is `.ts`, not `.json`, on purpose** — `resolveJsonModule` is off and `nest-cli.json` has no `assets` rule, so a JSON import would compile but be absent from `dist/` at runtime. Verified by booting the built app twice against a throwaway database: boot 1 seeded 14, boot 2 skipped (no duplicates).
+- **Fixed the production console 404** (`/investigate`). Root cause: [Footer.tsx:32](frontend/src/components/shared/Footer.tsx:32) links to `/privacy`, which had no route under `src/app/`. Next.js prefetches in-viewport `<Link>`s, so the footer scrolling into view fired a prefetch that 404'd. Added [frontend/src/app/privacy/page.tsx](frontend/src/app/privacy/page.tsx) plus [scripts/check-routes.mjs](frontend/scripts/check-routes.mjs) (`npm run check:routes`) to catch dangling internal links. Verified: check fails before / passes after, `tsc --noEmit` clean, `next build` lists `/privacy`. Separately confirmed **"No events found." is not a bug** — the Render backend returns `200 {"data":[],"total":0}`; the production DB has no events.
 - **Created this `CLAUDE.md`.** Surveyed the repo (root, `backend/src`, `frontend/src`, both `package.json`s, entities, `main.ts`, `app.module.ts`, controllers, `AuthContext`, env usage) and wrote the initial guide: stack, commands, architecture, route table, env vars, conventions, gotchas. Noted the one uncommitted change on `main`: `backend/src/seed/seed.service.ts` (seed admin password + formatting).

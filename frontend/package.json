@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:routes": "node scripts/check-routes.mjs",
+    "check:retry": "node scripts/check-retry.mjs",
+    "check": "npm run check:routes && npm run check:retry"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",

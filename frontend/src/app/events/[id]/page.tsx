@@ -40,7 +40,8 @@ export default function EventDetailPage() {
       if (!eventId) return;
       setIsLoading(true);
       try {
-        const response = await api.post('/events/public/find', { id: eventId });
+        // A read despite being a POST, so it is safe to replay on a network blip.
+        const response = await api.post('/events/public/find', { id: eventId }, { retryable: true });
         setEvent(response.data);
       } catch (err) {
         console.error("Failed to fetch event", err);

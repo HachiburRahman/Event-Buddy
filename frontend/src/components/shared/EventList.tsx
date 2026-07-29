@@ -22,8 +22,11 @@ const EventList = ({ title, type, search }: EventListProps) => {
   
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
-  const limit = 6; 
+  // The API runs on a Render free instance that sleeps when idle. A cold start
+  // takes a while, so tell the user that instead of showing a silent skeleton.
+  const [isSlow, setIsSlow] = useState(false);
+
+  const limit = 6;
 
   const fetchEvents = useCallback(async (page: number) => {
     setIsLoading(true);
@@ -44,16 +47,25 @@ const EventList = ({ title, type, search }: EventListProps) => {
       setCurrentPage(response.data.page);
     } catch (err) {
       console.error(`Failed to fetch ${type} events:`, err);
-      setError('Could not load events. Please try again later.');
+      setError('Could not load events. The server may be waking up.');
     } finally {
       setIsLoading(false);
     }
-  }, [type, search]); 
+  }, [type, search]);
 
   useEffect(() => {
     fetchEvents(currentPage);
   }, [fetchEvents, currentPage]);
-  
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIsSlow(false);
+      return;
+    }
+    const timer = setTimeout(() => setIsSlow(true), 4000);
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -62,16 +74,34 @@ const EventList = ({ title, type, search }: EventListProps) => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {Array.from({ length: limit }).map((_, index) => (
-            <EventCardSkeleton key={index} />
-          ))}
-        </div>
+        <>
+          {isSlow && (
+            <p className="text-center text-medium-gray mb-6">
+              Waking up the server, this can take up to a minute on the first visit.
+            </p>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: limit }).map((_, index) => (
+              <EventCardSkeleton key={index} />
+            ))}
+          </div>
+        </>
       );
     }
 
     if (error) {
-      return <p className="text-center text-danger-red">{error}</p>;
+      return (
+        <div className="text-center">
+          <p className="text-danger-red">{error}</p>
+          <button
+            type="button"
+            onClick={() => fetchEvents(currentPage)}
+            className="mt-4 py-2 px-6 text-sm font-semibold text-white bg-primary-blue rounded-xl shadow-md shadow-primary-blue/30 hover:opacity-90 transition-all duration-300"
+          >
+            Try again
+          </button>
+        </div>
+      );
     }
 
     if (events.length === 0) {
