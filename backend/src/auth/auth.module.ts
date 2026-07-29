@@ -9,6 +9,7 @@ import { AuthController } from './auth.controller';
 import { User } from './entities/user.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { MailModule } from 'src/mail/mail.module';
+import { requireJwtSecret } from '../config/jwt.config';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { MailModule } from 'src/mail/mail.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: requireJwtSecret(configService),
         signOptions: {
           expiresIn: configService.get('JWT_EXPIRES_IN', '1d'),
         },
