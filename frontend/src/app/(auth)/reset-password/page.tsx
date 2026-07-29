@@ -6,6 +6,7 @@ import { useState, FormEvent, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import api from '@/lib/axios';
+import { getApiErrorMessage } from '@/lib/errors';
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -37,8 +38,7 @@ function ResetPasswordForm() {
 
       setCodeVerified(true);
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Invalid or expired verification code.';
-      setError(errorMessage);
+      setError(getApiErrorMessage(err, 'Invalid or expired verification code.'));
     } finally {
       setVerifyingCode(false);
     }
@@ -85,8 +85,7 @@ function ResetPasswordForm() {
       router.push('/login');
 
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Failed to reset password. The code may be invalid or expired.';
-      setError(errorMessage);
+      setError(getApiErrorMessage(err, 'Failed to reset password. The code may be invalid or expired.'));
     } finally {
       setIsLoading(false);
     }

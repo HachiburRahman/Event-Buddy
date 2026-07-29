@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import api from '@/lib/axios';
+import { getApiErrorMessage } from '@/lib/errors';
 import { IBooking } from '@/types';
 
 export default function UserDashboardPage() {
@@ -54,7 +55,7 @@ export default function UserDashboardPage() {
             
             setBookings(prevBookings => prevBookings.filter(b => b.id !== bookingId));
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to cancel booking.');
+            alert(getApiErrorMessage(err, 'Failed to cancel booking.'));
         }
     };
     

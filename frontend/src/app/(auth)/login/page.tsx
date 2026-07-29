@@ -5,6 +5,7 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
+import { getApiErrorMessage } from '@/lib/errors';
 
 export default function LoginPage() {
   const { login } = useAuth(); 
@@ -26,8 +27,7 @@ export default function LoginPage() {
       
       await login({ email, password });
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Login failed. Please check your credentials and try again.';
-      setError(errorMessage);
+      setError(getApiErrorMessage(err, 'Login failed. Please try again.'));
     } finally {
       setIsLoading(false);
     }

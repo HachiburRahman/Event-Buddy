@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AccessTokenGuard } from './common/guards/accessToken.guard';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { buildCorsOptions } from './config/cors.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
@@ -24,11 +25,7 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-  app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-  });
+  app.enableCors(buildCorsOptions(process.env.FRONTEND_URL));
 
   // Swagger Configuration
   const config = new DocumentBuilder()

@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { IEvent } from '@/types';
 import api from '@/lib/axios';
+import { getApiErrorMessage } from '@/lib/errors';
 import { useAuth } from '@/hooks/useAuth';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/shared/Footer';
@@ -72,8 +73,7 @@ export default function EventDetailPage() {
             router.push('/user/dashboard');
         }
     } catch (err: any) {
-        const message = err.response?.data?.message || 'An unexpected error occurred.';
-        setBookingError(message);
+        setBookingError(getApiErrorMessage(err, 'An unexpected error occurred.'));
     } finally {
         setIsBooking(false);
     }

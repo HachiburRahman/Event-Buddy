@@ -6,6 +6,7 @@ import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import api from '@/lib/axios';
+import { getApiErrorMessage } from '@/lib/errors';
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
@@ -37,8 +38,7 @@ export default function ForgotPasswordPage() {
       }, 2000);
 
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Failed to send reset code. Please check your email and try again.';
-      setError(errorMessage);
+      setError(getApiErrorMessage(err, 'Failed to send reset code. Please try again.'));
     } finally {
       setIsLoading(false);
     }

@@ -5,6 +5,7 @@
 import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
+import { getApiErrorMessage } from '@/lib/errors';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -32,8 +33,7 @@ export default function RegisterPage() {
       await register({ fullName, email, password });
     } catch (err: any) {
 
-      const errorMessage = err.response?.data?.message || 'Registration failed. This email may already be in use.';
-      setError(errorMessage);
+      setError(getApiErrorMessage(err, 'Registration failed. Please try again.'));
     } finally {
 
       setIsLoading(false);
